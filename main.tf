@@ -13,6 +13,12 @@ resource "aws_vpc" "main" {
   tags = "${merge(var.tags, map("Name", format("%s", var.name)))}"
 }
 
+resource "aws_vpc_ipv4_cidr_block_association" "secondary_cidr" {
+  count      = "${var.create_vpc ? 0 : 1}"
+  vpc_id     = "${var.vpc_id}"
+  cidr_block = "${var.vpc_cidr}"
+}
+
 resource "aws_subnet" "public" {
   count = "${var.create ? length(var.vpc_cidrs_public) : 0}"
 
